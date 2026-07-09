@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:home' %}">
+            <i class="fa-solid fa-shield-halved text-primary fs-4"></i>
+            <span class="fw-bold tracking-wide">SafeRoute <span class="text-primary">BD</span></span>
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'core:home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#features">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-warning fw-semibold" href="#"><i class="fa-solid fa-map-location-dot me-1"></i> Live Map</a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-center gap-2">
+                <a href="#" class="btn btn-outline-light btn-sm px-3 rounded-pill">Log In</a>
+                <a href="#" class="btn btn-primary btn-sm px-3 rounded-pill fw-semibold">Register</a>
+            </div>
+        </div>
+    </div>
+</nav>
