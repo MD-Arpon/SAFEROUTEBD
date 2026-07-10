@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SafeRoute BD - Empowering Safe Travel in Bangladesh{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5 py-lg-6 position-relative overflow-hidden text-white bg-dark">
+    <div class="container position-relative z-1 py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="badge bg-primary bg-opacity-25 text-primary border border-primary px-3 py-2 rounded-pill mb-3">
+                    <i class="fa-solid fa-shield-heart me-1"></i> Smart Crowd-Sourced Navigation
+                </span>
+                <h1 class="display-4 fw-bold mb-3 leading-tight">
+                    Navigate Bangladesh <br><span class="text-gradient">With Safety & Confidence</span>
+                </h1>
+                <p class="lead text-secondary mb-4 col-lg-10">
+                    Real-time community reporting, street lighting analytics, incident tracking, and multi-factor safety scoring to guide your journey home safely.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#" class="btn btn-primary btn-lg px-4 rounded-pill shadow-sm fw-semibold">
+                        <i class="fa-solid fa-route me-2"></i> Find Safe Route
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-lg px-4 rounded-pill fw-semibold">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i> Report Incident
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card border-0 bg-secondary bg-opacity-10 backdrop-blur rounded-4 p-4 text-white border border-secondary">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h6 class="fw-bold mb-0 text-uppercase tracking-wider text-muted small">Live Safety Alert</h6>
+                        <span class="badge bg-success rounded-pill">Active System</span>
+                    </div>
+                    <div class="p-3 bg-dark rounded-3 mb-3 border border-secondary border-opacity-50">
+                        <div class="d-flex align-items-start gap-3">
+                            <i class="fa-solid fa-lightbulb text-warning fs-3 mt-1"></i>
+                            <div>
+                                <h6 class="fw-semibold mb-1">Low Lighting Reported</h6>
+                                <p class="small text-secondary mb-0">Mirpur-10 Circle area. Exercise caution during late evening hours.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-50">
+                        <div class="d-flex align-items-start gap-3">
+                            <i class="fa-solid fa-users text-info fs-3 mt-1"></i>
+                            <div>
+                                <h6 class="fw-semibold mb-1">High Crowd Density</h6>
+                                <p class="small text-secondary mb-0">Farmgate Overbridge zone. Active crowd reports updated 10m ago.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-primary text-white py-4 shadow-sm">
+    <div class="container">
+        <div class="row text-center g-3">
+            <div class="col-6 col-md-3">
+                <h3 class="fw-bold mb-0">1,250+</h3>
+                <p class="small mb-0 text-white-50">Verified Reports</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h3 class="fw-bold mb-0">85%</h3>
+                <p class="small mb-0 text-white-50">Safe Routes Calculated</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h3 class="fw-bold mb-0">24/7</h3>
+                <p class="small mb-0 text-white-50">Community Monitoring</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h3 class="fw-bold mb-0">Dhaka</h3>
+                <p class="small mb-0 text-white-50">Active Coverage Area</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="features" class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="text-primary text-uppercase fw-bold small tracking-widest">Why SafeRoute BD</span>
+            <h2 class="fw-bold mt-2">Comprehensive Features for Road Safety</h2>
+            <p class="text-muted col-lg-6 mx-auto">Combining geospatial data with community-driven metrics to create transparent safety indicators.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 hover-lift">
+                    <div class="icon-square bg-primary bg-opacity-10 text-primary rounded-3 mb-3">
+                        <i class="fa-solid fa-map-location-dot fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">Safe Navigation</h5>
+                    <p class="text-muted small mb-0">Calculates non-shortest routes prioritized strictly by multi-factor safety metrics and ambient illumination levels.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 hover-lift">
+                    <div class="icon-square bg-danger bg-opacity-10 text-danger rounded-3 mb-3">
+                        <i class="fa-solid fa-bullhorn fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">Community Incident Reporting</h5>
+                    <p class="text-muted small mb-0">Instantly flag crimes, street light failures, harassment incidents, and roadblocks with precise GPS location tags.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 hover-lift">
+                    <div class="icon-square bg-warning bg-opacity-10 text-warning rounded-3 mb-3">
+                        <i class="fa-solid fa-calculator fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">Weighted Safety Score</h5>
+                    <p class="text-muted small mb-0">Algorithmic evaluation of route safety based on crime history, lighting, crowds, and verified user ratings.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 hover-lift">
+                    <div class="icon-square bg-success bg-opacity-10 text-success rounded-3 mb-3">
+                        <i class="fa-solid fa-lightbulb fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">Lighting & Infrastructure</h5>
+                    <p class="text-muted small mb-0">Tracks streetlight functionality state across Dhaka city sectors to warn users during nocturnal transit.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 hover-lift">
+                    <div class="icon-square bg-info bg-opacity-10 text-info rounded-3 mb-3">
+                        <i class="fa-solid fa-users-viewfinder fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">Crowd Density Reports</h5>
+                    <p class="text-muted small mb-0">Real-time crowd level reports help identify deserted corridors vs. active, well-populated safe streets.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 hover-lift">
+                    <div class="icon-square bg-dark bg-opacity-10 text-dark rounded-3 mb-3">
+                        <i class="fa-solid fa-user-shield fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">Admin Verification</h5>
+                    <p class="text-muted small mb-0">Community reports undergo administrative review and upvoting mechanisms to eliminate spam and fake alerts.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light border-top">
+    <div class="container py-3">
+        <div class="bg-dark text-white rounded-4 p-4 p-lg-5 text-center position-relative overflow-hidden shadow">
+            <h2 class="fw-bold mb-3">Make Bangladesh Streets Safer Together</h2>
+            <p class="text-secondary col-lg-8 mx-auto mb-4">Join our growing community. Contribute incident updates, rate route safety, and protect your fellow commuters.</p>
+            <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 fw-semibold">Get Started Today</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

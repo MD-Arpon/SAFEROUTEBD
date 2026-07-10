@@ -10,22 +10,44 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'core:home' %}">Home</a>
+                    <a class="nav-link" href="{% url 'core:home' %}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#features">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#about">About</a>
+                    <a class="nav-link" href="{% url 'core:home' %}#features">Features</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-warning fw-semibold" href="#"><i class="fa-solid fa-map-location-dot me-1"></i> Live Map</a>
                 </li>
             </ul>
             <div class="d-flex align-items-center gap-2">
-                <a href="#" class="btn btn-outline-light btn-sm px-3 rounded-pill">Log In</a>
-                <a href="#" class="btn btn-primary btn-sm px-3 rounded-pill fw-semibold">Register</a>
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle rounded-pill px-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user-check me-1 text-success"></i> {{ user.username }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                            <li><a class="dropdown-menu-item dropdown-item" href="{% url 'accounts:profile' %}"><i class="fa-solid fa-id-card me-2"></i> My Profile</a></li>
+                            <li><a class="dropdown-menu-item dropdown-item" href="{% url 'accounts:edit_profile' %}"><i class="fa-solid fa-user-gear me-2"></i> Edit Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-menu-item dropdown-item text-danger" href="{% url 'accounts:logout' %}"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-sm px-3 rounded-pill">Log In</a>
+                    <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm px-3 rounded-pill fw-semibold">Register</a>
+                {% endif %}
             </div>
         </div>
     </div>
 </nav>
+
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm rounded-3" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}

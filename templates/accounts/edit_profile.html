@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - SafeRoute BD{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h4 class="fw-bold mb-4"><i class="fa-solid fa-user-pen text-primary me-2"></i>Edit Profile Details</h4>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h6 class="text-primary fw-bold mb-3">Personal Info</h6>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">First Name</label>
+                            {{ u_form.first_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Last Name</label>
+                            {{ u_form.last_name }}
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-semibold">Email Address</label>
+                            {{ u_form.email }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h6 class="text-primary fw-bold mb-3">Extended Profile Info</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Phone Number</label>
+                            {{ p_form.phone_number }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Address / Area</label>
+                            {{ p_form.address }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold">Profile Picture</label>
+                            {{ p_form.avatar }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold">Bio</label>
+                            {{ p_form.bio }}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-light rounded-pill px-4">Cancel</a>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
