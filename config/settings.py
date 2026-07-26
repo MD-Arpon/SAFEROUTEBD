@@ -14,14 +14,8 @@ SECRET_KEY = os.environ.get(
 # Automatically set DEBUG=False on Render, True during local development
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# Allow local traffic, all Render domains, and your exact live URL
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    '.onrender.com',
-    'saferoute-bd-phfs.onrender.com',
-    '*',
-]
+# Allow all host headers in production to prevent DisallowedHost errors
+ALLOWED_HOSTS = ['*']
 
 
 # --- INSTALLED APPS ---
