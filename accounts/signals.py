@@ -7,10 +7,12 @@ from .models import Profile
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     """
-    Signal handler that automatically generates a Profile record 
-    for every new User created.
+    Signal handler that automatically generates or updates 
+    a Profile record for every User.
     """
     if created:
         Profile.objects.create(user=instance)
     else:
+        # get_or_create prevents RelatedObjectDoesNotExist crashes
+        Profile.objects.get_or_create(user=instance)
         instance.profile.save()
