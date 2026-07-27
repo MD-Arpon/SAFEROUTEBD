@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4" style="max-width: 800px;">
+  <h2 class="mb-3">Report an Incident</h2>
+  <p class="text-muted">Click on the map or use your current location to pin where the incident occurred.</p>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      <label class="form-label font-weight-bold">Select Location on Map</label>
+      <div id="map" style="height: 350px; width: 100%; border-radius: 8px;" class="mb-2 border"></div>
+      <button type="button" id="locate-btn" class="btn btn-outline-primary btn-sm mb-3">
+        📍 Use My Current Location
+      </button>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Latitude</label>
+        {{ form.latitude }}
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Longitude</label>
+        {{ form.longitude }}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Location / Landmark Name</label>
+      {{ form.location_name }}
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Title</label>
+        {{ form.title }}
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Category</label>
+        {{ form.category }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Severity</label>
+        {{ form.severity }}
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Photo Attachment (Optional)</label>
+        {{ form.photo }}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      {{ form.description }}
+    </div>
+
+    <button type="submit" class="btn btn-danger w-100 py-2">Submit Incident Report</button>
+  </form>
+</div>
+
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  // Default to Dhaka coordinates
+  const defaultLat = 23.8103;
+  const defaultLng = 90.4125;
+
+  const map = L.map('map').setView([defaultLat, defaultLng], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  let marker;
+
+  function updateMarker(lat, lng) {
+    if (marker) {
+      marker.setLatLng([lat, lng]);
+    } else {
+      marker = L.marker([lat, lng]).addTo(map);
+    }
+    document.getElementById('id_latitude').value = lat.toFixed(6);
+    document.getElementById('id_longitude').value = lng.toFixed(6);
+  }
+
+  map.on('click', function(e) {
+    updateMarker(e.latlng.lat, e.latlng.lng);
+  });
+
+  document.getElementById('locate-btn').addEventListener('click', function() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        map.setView([lat, lng], 15);
+        updateMarker(lat, lng);
+      }, function() {
+        alert('Unable to retrieve your location.');
+      });
+    } else {
+      alert('Geolocation is not supported by your browser.');
+    }
+  });
+</script>
+{% endblock %}

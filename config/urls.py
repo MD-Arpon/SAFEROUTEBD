@@ -7,6 +7,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('accounts/', include('accounts.urls')),
+    path('reports/', include('reports.urls')),  # <--- Added reports routing
+    
 ]
 
 if settings.DEBUG:

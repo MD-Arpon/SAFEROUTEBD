@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Recent Safety Incidents</h2>
+    <a href="{% url 'reports:report_incident' %}" class="btn btn-danger">+ Report Incident</a>
+  </div>
+
+  {% if incidents %}
+    <div class="row">
+      {% for incident in incidents %}
+        <div class="col-md-6 mb-3">
+          <div class="card h-100 border-left-danger shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title text-primary mb-1">{{ incident.title }}</h5>
+                <span class="badge {% if incident.severity == 'HIGH' %}bg-danger{% elif incident.severity == 'MEDIUM' %}bg-warning text-dark{% else %}bg-info text-dark{% endif %}">
+                  {{ incident.get_severity_display }}
+                </span>
+              </div>
+              <p class="text-muted small mb-2">📍 {{ incident.location_name }} • {{ incident.created_at|date:"M d, Y H:i" }}</p>
+              <p class="card-text">{{ incident.description }}</p>
+              {% if incident.photo %}
+                <img src="{{ incident.photo.url }}" class="img-fluid rounded mt-2" style="max-height: 200px; object-fit: cover;">
+              {% endif %}
+            </div>
+            <div class="card-footer bg-light text-muted small">
+              Reported by: {{ incident.user.username }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center">
+      No incidents reported yet.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
