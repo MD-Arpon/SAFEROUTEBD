@@ -10,10 +10,11 @@
         <div class="col-md-7 mb-4">
             <div class="card shadow-sm">
                 <div class="card-body p-2">
-                    <div id="map" style="height: 480px; width: 100%; border-radius: 8px;"></div>
+                    <!-- Map Container with Explicit Styling -->
+                    <div id="incident-map" style="height: 500px; width: 100%; border-radius: 8px; position: relative; z-index: 1;"></div>
                 </div>
             </div>
-            <small class="text-muted mt-2 d-block">* Click on the map to automatically set Latitude & Longitude.</small>
+            <small class="text-muted mt-2 d-block">* Click on the map to set location coordinates automatically.</small>
         </div>
 
         <!-- Form Section -->
@@ -25,7 +26,7 @@
                         
                         {{ form.as_p }}
 
-                        <button type="submit" class="btn btn-teal w-100 mt-3">Submit Incident Report</button>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Submit Incident Report</button>
                     </form>
                 </div>
             </div>
@@ -33,26 +34,29 @@
     </div>
 </div>
 
-<!-- Leaflet CSS & JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Leaflet CSS & JS CDN (Head-level injection safety) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-<!-- Leaflet Heatmap Plugin Plugin CDN -->
+<!-- Leaflet Heatmap Plugin CDN -->
 <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Default View: Dhaka Location
-        var map = L.map('map').setView([23.8103, 90.4125], 12);
+    window.addEventListener('load', function() {
+        // 1. Initialize Map
+        var map = L.map('incident-map').setView([23.8103, 90.4125], 12);
 
-        // Tile Layer
+        // 2. Add Tile Layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Render Heatmap from Django Context Data
-        var heatPoints = {{ heat_data_json|safe }};
+        // Force map resize recalculation after load
+        setTimeout(function(){ map.invalidateSize(); }, 400);
+
+        // 3. Render Heatmap if data exists
+        var heatPoints = {{ heat_data_json|default:"[]"|safe }};
         if (heatPoints && heatPoints.length > 0) {
             L.heatLayer(heatPoints, {
                 radius: 25,
@@ -62,22 +66,21 @@
             }).addTo(map);
         }
 
-        // Click Event: Click to Set Lat/Long in Form Inputs
+        // 4. Click Event to Capture Lat/Lng
         var currentMarker;
         map.on('click', function(e) {
             var lat = e.latlng.lat;
             var lng = e.latlng.lng;
 
-            // Fill Django Hidden or Text Inputs if present
-            var latInput = document.getElementById('id_latitude');
-            var lngInput = document.getElementById('id_longitude');
+            // Target Django Input Fields (Fallback search logic)
+            var latInput = document.getElementById('id_latitude') || document.querySelector('input[name="latitude"]');
+            var lngInput = document.getElementById('id_longitude') || document.querySelector('input[name="longitude"]');
 
             if (latInput && lngInput) {
                 latInput.value = lat.toFixed(6);
                 lngInput.value = lng.toFixed(6);
             }
 
-            // Remove existing temporary marker and add new one
             if (currentMarker) {
                 map.removeLayer(currentMarker);
             }
