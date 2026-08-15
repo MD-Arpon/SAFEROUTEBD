@@ -1,112 +1,90 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="container my-4" style="max-width: 800px;">
-  <h2 class="mb-3">Report an Incident</h2>
-  <p class="text-muted">Click on the map or use your current location to pin where the incident occurred.</p>
-
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="container mt-4">
+    <h2 class="mb-3 text-teal">Report an Incident</h2>
     
-    <div class="mb-3">
-      <label class="form-label font-weight-bold">Select Location on Map</label>
-      <div id="map" style="height: 350px; width: 100%; border-radius: 8px;" class="mb-2 border"></div>
-      <button type="button" id="locate-btn" class="btn btn-outline-primary btn-sm mb-3">
-        📍 Use My Current Location
-      </button>
-    </div>
-
     <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Latitude</label>
-        {{ form.latitude }}
-      </div>
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Longitude</label>
-        {{ form.longitude }}
-      </div>
-    </div>
+        <!-- Map Section -->
+        <div class="col-md-7 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-2">
+                    <div id="map" style="height: 480px; width: 100%; border-radius: 8px;"></div>
+                </div>
+            </div>
+            <small class="text-muted mt-2 d-block">* Click on the map to automatically set Latitude & Longitude.</small>
+        </div>
 
-    <div class="mb-3">
-      <label class="form-label">Location / Landmark Name</label>
-      {{ form.location_name }}
-    </div>
+        <!-- Form Section -->
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {{ form.as_p }}
 
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Title</label>
-        {{ form.title }}
-      </div>
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Category</label>
-        {{ form.category }}
-      </div>
+                        <button type="submit" class="btn btn-teal w-100 mt-3">Submit Incident Report</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Severity</label>
-        {{ form.severity }}
-      </div>
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Photo Attachment (Optional)</label>
-        {{ form.photo }}
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Description</label>
-      {{ form.description }}
-    </div>
-
-    <button type="submit" class="btn btn-danger w-100 py-2">Submit Incident Report</button>
-  </form>
 </div>
 
 <!-- Leaflet CSS & JS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<!-- Leaflet Heatmap Plugin Plugin CDN -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
 <script>
-  // Default to Dhaka coordinates
-  const defaultLat = 23.8103;
-  const defaultLng = 90.4125;
+    document.addEventListener("DOMContentLoaded", function() {
+        // Default View: Dhaka Location
+        var map = L.map('map').setView([23.8103, 90.4125], 12);
 
-  const map = L.map('map').setView([defaultLat, defaultLng], 13);
+        // Tile Layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+        // Render Heatmap from Django Context Data
+        var heatPoints = {{ heat_data_json|safe }};
+        if (heatPoints && heatPoints.length > 0) {
+            L.heatLayer(heatPoints, {
+                radius: 25,
+                blur: 15,
+                maxZoom: 17,
+                gradient: {0.4: 'blue', 0.65: 'lime', 1: 'red'}
+            }).addTo(map);
+        }
 
-  let marker;
+        // Click Event: Click to Set Lat/Long in Form Inputs
+        var currentMarker;
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
 
-  function updateMarker(lat, lng) {
-    if (marker) {
-      marker.setLatLng([lat, lng]);
-    } else {
-      marker = L.marker([lat, lng]).addTo(map);
-    }
-    document.getElementById('id_latitude').value = lat.toFixed(6);
-    document.getElementById('id_longitude').value = lng.toFixed(6);
-  }
+            // Fill Django Hidden or Text Inputs if present
+            var latInput = document.getElementById('id_latitude');
+            var lngInput = document.getElementById('id_longitude');
 
-  map.on('click', function(e) {
-    updateMarker(e.latlng.lat, e.latlng.lng);
-  });
+            if (latInput && lngInput) {
+                latInput.value = lat.toFixed(6);
+                lngInput.value = lng.toFixed(6);
+            }
 
-  document.getElementById('locate-btn').addEventListener('click', function() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        map.setView([lat, lng], 15);
-        updateMarker(lat, lng);
-      }, function() {
-        alert('Unable to retrieve your location.');
-      });
-    } else {
-      alert('Geolocation is not supported by your browser.');
-    }
-  });
+            // Remove existing temporary marker and add new one
+            if (currentMarker) {
+                map.removeLayer(currentMarker);
+            }
+            currentMarker = L.marker([lat, lng]).addTo(map)
+                .bindPopup("Selected Incident Location")
+                .openPopup();
+        });
+    });
 </script>
 {% endblock %}
